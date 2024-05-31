@@ -20,7 +20,7 @@ def generate_launch_description():
     # Include the robot_state_publisher launch file, provided by our own package. Force sim time to be enabled
     # !!! MAKE SURE YOU SET THE PACKAGE NAME CORRECTLY !!!
 
-    package_name='articubot_one' #<--- CHANGE ME
+    package_name='robot_chebbi' #<--- CHANGE ME
 
     rsp = IncludeLaunchDescription(
                 PythonLaunchDescriptionSource([os.path.join(
@@ -29,7 +29,13 @@ def generate_launch_description():
     )
 
     
-
+    twist_mux_params = os.path.join(get_package_share_directory(package_name),'config','twist_mux.yaml')
+    
+    twist_mux = Node(
+        package="twist_mux",
+        parameters=[twist_mux_params],
+        remappings=[('/cmd_vel_out','/diff_cont/cmd_vel_unstamped')]
+    )
 
     robot_description = Command(['ros2 param get --hide-type /robot_state_publisher robot_description'])
 
@@ -92,6 +98,7 @@ def generate_launch_description():
     # Launch them all!
     return LaunchDescription([
         rsp,
+        twist_mux,
         delayed_controller_manager,
         delayed_diff_drive_spawner,
         delayed_joint_broad_spawner
