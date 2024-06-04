@@ -5,8 +5,7 @@ twist_mux:
         topic   : cmd_vel
         timeout : 0.5
         priority: 10
-      
-      teleop_twist_keyboard:
-        topic   : diff_cont/cmd_vel_unstamped
+      keyboard:
+        topic   : key_vel
         timeout : 0.5
-        priority: 100
+        priority: 90
